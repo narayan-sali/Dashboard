@@ -1,41 +1,41 @@
 import mongoose from "mongoose"
-import {Datamodel} from "../models/data.model.js"
+import {User} from "../models/user.model.js"
 import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 
-const addToCurrentData = asyncHandler(async(req,res)=>{
-    const  {country} = req.body
-    if(!country){
-        throw new ApiError(400, "country required")
-    }
-    const data = await Datamodel.create({
-        country
-    })
+// const addToCurrentData = asyncHandler(async(req,res)=>{
+//     const  {country} = req.body
+//     if(!country){
+//         throw new ApiError(400, "country required")
+//     }
+//     const data = await Datamodel.create({
+//         country
+//     })
    
-    return res
-    .status(200)
-    .json(new ApiResponse(200, data , " data  added  succesfully"))
-  })
+//     return res
+//     .status(200)
+//     .json(new ApiResponse(200, data , " data  added  succesfully"))
+//   })
   
   
 
 
-const getCurrentData = asyncHandler(async(req,res)=>{
+const getCurrentUserData = asyncHandler(async(req,res)=>{
   const objectId = req.body;
   if(!objectId){
     throw new ApiError(404, "inavlid id")
   }
   console.log("ObjectId:", objectId);
-    const data = await Datamodel.findOne({ _id: objectId });
+    const user = await User.findOne({ _id: objectId });
     
     
-    if (!data) {
+    if (!user) {
         throw new ApiError(404, "NOT FOUND");
     }
     return res
     .status(200)
-    .json(new ApiResponse(200, data , "current data  fetched succesfully"))
+    .json(new ApiResponse(200, user , "current  user data  fetched succesfully"))
   })
   
 
@@ -88,19 +88,19 @@ const getCurrentData = asyncHandler(async(req,res)=>{
 
 
     const [data , count] =  await Promise.all([
-      Datamodel.aggregate([
+      User.aggregate([
         { $match: filters },
         { $project: projection }
       ]),
-      Datamodel.countDocuments(filters)
+      User.countDocuments(filters)
     ]);
     if(!data){
-      throw new ApiError(401, "Data not found ")
+      throw new ApiError(401, " User Data not found ")
     }
     
     return res
     .status(200)
-    .json(new ApiResponse(200, {data ,  count}, `data ${count} fetched succesfully`))
+    .json(new ApiResponse(200, {data ,  count}, ` user data ${count} fetched succesfully`))
   })
 
-export {getCurrentData,addToCurrentData,fetchByFilter}
+export {getCurrentUserData,fetchByFilter}

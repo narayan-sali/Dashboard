@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 
-const datamodelSchema = new Schema (
+const userSchema = new Schema (
     {
     end_year:{
         type:String,
@@ -57,4 +57,4 @@ const datamodelSchema = new Schema (
     
 })
 
-export const Datamodel = mongoose.model("Datamodel", datamodelSchema)
+export const User = mongoose.model("User", userSchema)
